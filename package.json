@@ -1,0 +1,31 @@
+{
+  "name": "pocket-vue",
+  "version": "1.0.0",
+  "description": "Learn and master the principle of vue3, with lots of notes",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Btrya/pocket-vue.git"
+  },
+  "author": "Btrya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Btrya/pocket-vue/issues"
+  },
+  "homepage": "https://github.com/Btrya/pocket-vue#readme",
+  "dependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
+    "babel-jest": "^27.5.1",
+    "ts-jest": "^27.1.4",
+    "typescript": "^4.6.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.1",
+    "jest": "^27.5.1"
+  }
+}
