@@ -1,5 +1,5 @@
 import { reactive } from '../reactive'
-import { effect, trigger } from '../effect'
+import { effect, stop } from '../effect'
 
 describe('effect', () => {
   it('happy path', () => {
@@ -63,5 +63,44 @@ describe('effect', () => {
     // 调用了 scheduler 后 run 拿到 runner，这时候调用 run 才去执行 dummy = obj.age 
     run()
     expect(dummy).toBe(14)
+  });
+
+  /**
+   * stop 方法 
+   * 调用 stop 后 响应式对象属性被修改 不会触发 执行依赖 的动作
+   * 原传入的依赖还是要可以手动执行的
+   */
+  it('stop', () => {
+    let dummy
+    const obj =  reactive({ prop: 1 })
+    const runner = effect(() => {
+      dummy = obj.prop
+    })
+    obj.prop = 2
+    expect(dummy).toBe(2)
+    // stop 了 runner 去修改响应式的时候 就不应该触发了
+    stop(runner)
+    obj.prop = 3
+    expect(dummy).toBe(2)
+    // 被 stop 了的 runner 仍然可以手动执行
+    runner()
+    expect(dummy).toBe(3)
+  });
+
+  /**
+   * onStop hooks，在调用 stop 方法后应该被执行
+   */
+  it('onStop', () => {
+    const obj =  reactive({ foo: 1 })
+    const onStop = jest.fn()
+    let dummy
+    const runner = effect(
+      () => {
+        dummy = obj.foo
+      }, 
+      { onStop }
+    )
+    stop(runner)
+    expect(onStop).toBeCalledTimes(1)
   });
 });

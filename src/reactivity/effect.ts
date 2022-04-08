@@ -1,5 +1,10 @@
+import { extend } from '../shared/index'
+
 class ReactiveEffect{
   private _fn: any
+  deps = [] // 反向收集 set 数组
+  active = true // 是否清空过
+  onStop?: () => void // onStop hooks
   constructor(fn, public scheduler?) {
     this._fn = fn
   }
@@ -7,6 +12,19 @@ class ReactiveEffect{
     activeEffect = this
     return this._fn()
   }
+  stop() {
+    if (this.active) {
+      cleanupEffect(this)
+      this.active = false
+    }
+    if (this.onStop) this.onStop()
+  }
+}
+
+function cleanupEffect(effet) {
+  effet.deps.forEach((dep: any) => {
+    dep.delete(effet)
+  })
 }
 
 // 最外层用来保存每一个 target 的 weakMap
@@ -31,8 +49,10 @@ export function track(target, key) {
     dep = new Set()
     depsMap.set(key, dep)
   }
-
+  // 没有 effect 直接 return
+  if (!activeEffect) return
   dep.add(activeEffect) // 把对应的 effect 实例加入 set 里
+  activeEffect.deps.push(dep)
 }
 
 /**
@@ -55,8 +75,18 @@ export function trigger(target, key) {
 let activeEffect // 保存当前正在执行的 effect
 export function effect(fn, options: any = {}) {
   const _effect = new ReactiveEffect(fn, options.scheduler)
+  // options 处理
+  // 优化：_effect.onStop = options.onStop
+  // extned 语义化处理 options 
+  // 再优化： Object.assign(_effect, options)
+  extend(_effect, options)
   _effect.run()
   // run 函数内部涉及 activeEffect 的赋值 (activeEffect = this) 所以这里应该bind一下
-  const runner = _effect.run.bind(_effect)
+  const runner: any = _effect.run.bind(_effect)
+  runner.effect = _effect
   return runner
+}
+
+export function stop(runner) {
+  runner.effect.stop()
 }
