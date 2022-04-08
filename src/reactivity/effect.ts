@@ -1,5 +1,7 @@
 import { extend } from '../shared/index'
 
+let activeEffect // 保存当前正在执行的 effect
+let shouldTrack
 class ReactiveEffect{
   private _fn: any
   deps = [] // 反向收集 set 数组
@@ -9,8 +11,14 @@ class ReactiveEffect{
     this._fn = fn
   }
   run() {
+    if (!this.active) return this._fn()
+    // 收集
     activeEffect = this
-    return this._fn()
+    shouldTrack = true
+    const result = this._fn()
+    // reset
+    shouldTrack = false
+    return result
   }
   stop() {
     if (this.active) {
@@ -21,10 +29,11 @@ class ReactiveEffect{
   }
 }
 
-function cleanupEffect(effet) {
-  effet.deps.forEach((dep: any) => {
-    dep.delete(effet)
+function cleanupEffect(effect) {
+  effect.deps.forEach((dep: any) => {
+    dep.delete(effect)
   })
+  effect.deps.length = 0
 }
 
 // 最外层用来保存每一个 target 的 weakMap
@@ -35,6 +44,8 @@ const targetMap = new WeakMap()
  * @param key 对应属性的 key
  */
 export function track(target, key) {
+  // 没有 effect || 不应该 track  直接 return
+  if (!isTracking()) return
   // 拿到当前 target 对应的 map (每个对应的 target 底下应该保存着自己的 key 的 map)
   let depsMap = targetMap.get(target)
   // 拿不到，说明需要新建一个 map 并存入 weakMap
@@ -49,10 +60,14 @@ export function track(target, key) {
     dep = new Set()
     depsMap.set(key, dep)
   }
-  // 没有 effect 直接 return
-  if (!activeEffect) return
+  // 已经在 dep 中就不用 add 了
+  if (dep.has(activeEffect)) return
   dep.add(activeEffect) // 把对应的 effect 实例加入 set 里
   activeEffect.deps.push(dep)
+}
+
+function isTracking() { 
+  return shouldTrack && activeEffect !== undefined
 }
 
 /**
@@ -72,7 +87,6 @@ export function trigger(target, key) {
   }
 }
 
-let activeEffect // 保存当前正在执行的 effect
 export function effect(fn, options: any = {}) {
   const _effect = new ReactiveEffect(fn, options.scheduler)
   // options 处理

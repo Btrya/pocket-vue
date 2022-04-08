@@ -85,6 +85,18 @@ describe('effect', () => {
     // 被 stop 了的 runner 仍然可以手动执行
     runner()
     expect(dummy).toBe(3)
+
+    obj.prop++
+    // 上边 如果换成  obj.prop++ 那么其实是不通过的
+    // 原因：obj.prop++ 会先访问 obj.prop 属性 (obj.prop = obj.prop + 1)，这就会触发 get ，又去收集依赖了
+    // expect(dummy).toBe(4)
+    // // 由于依赖被重新收集，所以又变成响应式了
+    // obj.prop = 5
+    // expect(dummy).toBe(5)
+    // 调了 stop 的话在 track 存入依赖前 return 后
+    expect(dummy).toBe(3)
+    runner()
+    expect(dummy).toBe(4)
   });
 
   /**
