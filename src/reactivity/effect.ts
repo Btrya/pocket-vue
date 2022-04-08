@@ -1,11 +1,11 @@
 class ReactiveEffect{
   private _fn: any
-  constructor(fn) {
+  constructor(fn, public scheduler?) {
     this._fn = fn
   }
   run() {
     activeEffect = this
-    this._fn()
+    return this._fn()
   }
 }
 
@@ -43,13 +43,20 @@ export function track(target, key) {
 export function trigger(target, key) {
   let depsMap = targetMap.get(target)
   let dep = depsMap.get(key)
-  for (const effec of dep) {
-    effec.run()
+  for (const effect of dep) {
+    if (effect.scheduler) {
+      effect.scheduler()
+    } else {
+      effect.run()
+    }
   }
 }
 
 let activeEffect // 保存当前正在执行的 effect
-export function effect(fn) {
-  const _effect = new ReactiveEffect(fn)
+export function effect(fn, options: any = {}) {
+  const _effect = new ReactiveEffect(fn, options.scheduler)
   _effect.run()
+  // run 函数内部涉及 activeEffect 的赋值 (activeEffect = this) 所以这里应该bind一下
+  const runner = _effect.run.bind(_effect)
+  return runner
 }
