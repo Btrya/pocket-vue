@@ -1,4 +1,4 @@
-import { readonly } from '../reactive'
+import { readonly, isReadonly } from '../reactive'
 
 /**
  * 实现 readonly
@@ -9,6 +9,8 @@ describe('readonly', () => {
     const original = { foo: 1, bar: { baz: 2 } }
     const warpped = readonly(original)
     expect(warpped).not.toBe(original)
+    expect(isReadonly(warpped)).toBe(true)
+    expect(isReadonly(original)).toBe(false)
     expect(warpped.foo).toBe(1)
   });
 
