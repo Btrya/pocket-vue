@@ -11,6 +11,8 @@ describe('readonly', () => {
     expect(warpped).not.toBe(original)
     expect(isReadonly(warpped)).toBe(true)
     expect(isReadonly(original)).toBe(false)
+    expect(isReadonly(warpped.bar)).toBe(true)
+    expect(isReadonly(original.bar)).not.toBe(true)
     expect(warpped.foo).toBe(1)
   });
 

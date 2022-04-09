@@ -1,5 +1,6 @@
 import { track, trigger } from "./effect"
-import { ReactiveFlags } from "./reactive"
+import { ReactiveFlags, reactive, readonly } from "./reactive"
+import { isObject } from "../shared"
 
 const get = createGetter()
 const set = createSetter()
@@ -13,6 +14,10 @@ function createGetter(isReadonly = false) {
       return isReadonly
     }
     const res = Reflect.get(target, key)
+    // 如果 res 是对象 那么还需要深层次的实现响应式 
+    if (isObject(res)) {
+      return isReadonly ? readonly(res) : reactive(res)
+    }
     if (!isReadonly) {
       track(target, key)
     }
