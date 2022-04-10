@@ -2,9 +2,11 @@
   "name": "pocket-vue",
   "version": "1.0.0",
   "description": "Learn and master the principle of vue3, with lots of notes",
-  "main": "index.js",
+  "main": "lib/guide-pocket-vue.cjs.js",
+  "module": "lib/guide-pocket-vue.esm.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "rollup -c rollup.config.js --watch"
   },
   "repository": {
     "type": "git",
@@ -25,7 +27,10 @@
     "typescript": "^4.6.3"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.1",
     "@types/jest": "^27.4.1",
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "rollup": "^2.70.1",
+    "tslib": "^2.3.1"
   }
 }
