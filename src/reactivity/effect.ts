@@ -2,7 +2,7 @@ import { extend } from '../shared/index'
 
 let activeEffect // 保存当前正在执行的 effect
 let shouldTrack
-class ReactiveEffect{
+export class ReactiveEffect{
   private _fn: any
   deps = [] // 反向收集 set 数组
   active = true // 是否清空过
