@@ -1,6 +1,6 @@
 import { effect } from '../effect'
 import { reactive } from '../reactive'
-import { ref, isRef, unRef } from '../ref'
+import { ref, isRef, unRef, proxyRefs } from '../ref'
 describe('ref', () => {
   it('happy path', () => {
     const a = ref(1)
@@ -53,5 +53,25 @@ describe('ref', () => {
     const a = ref(1)
     expect(unRef(a)).toBe(1)
     expect(unRef(1)).toBe(1)
+  });
+
+  // vue3 在 template 中直接使用 ref.value 可以拿到数据的原因就是因为隐式调用了 proxyRefs
+  it('proxyRefs', () => {
+    const user = {
+      age: ref(18),
+      name: "Btrya"
+    }
+    const proxyUser = proxyRefs(user)
+    expect(user.age.value).toBe(18)
+    expect(proxyUser.age).toBe(18)
+    expect(proxyUser.name).toBe("Btrya")
+
+    proxyUser.age = 20
+    expect(user.age.value).toBe(20)
+    expect(proxyUser.age).toBe(20)
+
+    proxyUser.age = ref(25)
+    expect(user.age.value).toBe(25)
+    expect(proxyUser.age).toBe(25)
   });
 });
