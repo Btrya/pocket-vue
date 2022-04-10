@@ -1,4 +1,4 @@
-import { readonly, isReadonly } from '../reactive'
+import { readonly, isReadonly, isProxy } from '../reactive'
 
 /**
  * 实现 readonly
@@ -14,6 +14,7 @@ describe('readonly', () => {
     expect(isReadonly(warpped.bar)).toBe(true)
     expect(isReadonly(original.bar)).not.toBe(true)
     expect(warpped.foo).toBe(1)
+    expect(isProxy(warpped)).toBe(true)
   });
 
   it('warn then call set', () => {

@@ -3,7 +3,7 @@ import { createActiveObject } from '../shared'
 
 export const enum ReactiveFlags {
   IS_REACTIVE = "__v_isReactive",
-  IS_READONLY = "__v_isReadonly"
+  IS_READONLY = "__v_isReadonly",
 }
 
 export function reactive(raw) {
@@ -12,6 +12,10 @@ export function reactive(raw) {
 
 export function readonly(raw) {
   return createActiveObject(raw, readonlyHandlers)
+}
+
+export function shallowReadonly(raw) {
+  return createActiveObject(raw, shallowReadonlyHandlers)
 }
 
 export function isReactive(obj) {
@@ -23,6 +27,6 @@ export function isReadonly(obj) {
   return !!obj[ReactiveFlags.IS_READONLY]
 }
 
-export function shallowReadonly(raw) {
-  return createActiveObject(raw, shallowReadonlyHandlers)
+export function isProxy(obj) {
+  return isReactive(obj) || isReadonly(obj)
 }
