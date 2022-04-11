@@ -21,7 +21,7 @@ function processElement(vnode, container) {
 
 function mountElement(vnode, container) {
   const { children, type: tag, props } = vnode
-  const el = document.createElement(tag)
+  const el = vnode.el = document.createElement(tag)
   // string array
   if (typeof children === "string") {
     el.textContent = children
@@ -48,17 +48,20 @@ function processComponent(vnode, container) {
   mountComponet(vnode, container)
 }
 
-function mountComponet(vnode, container) {
-  const instance = createComponentInstance(vnode)
+function mountComponet(initialVnode, container) {
+  const instance = createComponentInstance(initialVnode)
   setupComponent(instance)
-  setupRenderEffect(instance, container)
+  setupRenderEffect(instance, initialVnode, container)
 }
 
-function setupRenderEffect(instance, container) {
+function setupRenderEffect(instance, initialVnode, container) {
   const { proxy } = instance
   // 拿到 instance proxy， get 已经被处理过了 会返回 setupState 的
   // subTree 是 vnode树
   const subTree = instance.render.call(proxy)
   // 继续拿着 subTree 去做 patch -> vnode -> component/element -> mountComponent/mountElement -> patch...
   patch(subTree, container)
+  // element 根节点 的 el
+  // instance.vnode.el 可以吗？
+  initialVnode.el = subTree.el
 }

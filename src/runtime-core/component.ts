@@ -1,3 +1,5 @@
+import { PublicInstanceProxyHandlers } from "./componentPublicInstance"
+
 export function createComponentInstance(vnode) {
   const component = {
     vnode,
@@ -24,16 +26,7 @@ function initSlots() {
 function setupStatefulComponent(instance) {
   // component 的 options
   const Component = instance.type
-  instance.proxy = new Proxy({}, {
-    get(target, key) {
-      // 从 setupState 取值
-      const { setupState } = instance
-      if (key in setupState) {
-        return setupState[key]
-      }
-      // 从 this.$el 取值
-    }
-  })
+  instance.proxy = new Proxy({_: instance}, PublicInstanceProxyHandlers)
   const { setup } = Component
   if (setup) {
     // 可能是 function / object  如果是函数就是组件的render函数 如果是object 需要注入到当前对戏那个的上下文中

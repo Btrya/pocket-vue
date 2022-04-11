@@ -1,10 +1,13 @@
 import { h } from "../../lib/guide-pocket-vue.esm.js"
+
+window.self = null
 export const App = {
   // .vue
   // <template></template>
   // render
   // 假设必须给 render
   render() {
+    window.self = this
     return h(
       "div", {
         id: "root",
