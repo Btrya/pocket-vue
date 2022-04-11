@@ -11,7 +11,10 @@ export const App = {
     return h(
       "div", {
         id: "root",
-        class: "red flex"
+        class: "red flex",
+        onClick() {
+          console.log('click')
+        }
       }, 
       "hi, " + this.msg
       // [h("p", { class: "red test" }, "hi"), h("p", { class: "blue" }, "pocket-vue")]
