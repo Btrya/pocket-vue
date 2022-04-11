@@ -55,8 +55,10 @@ function mountComponet(vnode, container) {
 }
 
 function setupRenderEffect(instance, container) {
+  const { proxy } = instance
+  // 拿到 instance proxy， get 已经被处理过了 会返回 setupState 的
   // subTree 是 vnode树
-  const subTree = instance.render()
+  const subTree = instance.render.call(proxy)
   // 继续拿着 subTree 去做 patch -> vnode -> component/element -> mountComponent/mountElement -> patch...
   patch(subTree, container)
 }

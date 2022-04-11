@@ -10,8 +10,8 @@ export const App = {
         id: "root",
         class: "red flex"
       }, 
-      // "hi, " + this.msg
-      [h("p", { class: "red test" }, "hi"), h("p", { class: "blue" }, "pocket-vue")]
+      "hi, " + this.msg
+      // [h("p", { class: "red test" }, "hi"), h("p", { class: "blue" }, "pocket-vue")]
     )
   },
   setup() {
