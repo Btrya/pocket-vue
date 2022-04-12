@@ -1,14 +1,17 @@
 import { PublicInstanceProxyHandlers } from "./componentPublicInstance"
 import { initProps } from "./componentProps"
 import { shallowReadonly } from "../reactivity/reactive"
+import { emit } from "./componentEmit"
 
 export function createComponentInstance(vnode) {
   const component = {
     vnode,
     type: vnode.type,
     setupState: {},
-    props: {}
+    props: {},
+    emit: () => {}
   }
+  component.emit = emit.bind(null, component) as any
   return component
 }
 
@@ -29,7 +32,9 @@ function setupStatefulComponent(instance) {
   const { setup } = Component
   if (setup) {
     // 可能是 function / object  如果是函数就是组件的render函数 如果是object 需要注入到当前对戏那个的上下文中
-    const setupResult = setup(shallowReadonly(instance.props))
+    const setupResult = setup(shallowReadonly(instance.props), {
+      emit: instance.emit,
+    })
     // 执行 setup 把用户定义的数据 设置给 实例的 setupState
     handleSetupResult(instance, setupResult)
   }
