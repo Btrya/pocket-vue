@@ -1,7 +1,11 @@
 export const extend = Object.assign
 
-export function createActiveObject(raw: any, baseHandlers) {
-  return new Proxy(raw, baseHandlers)
+export function createActiveObject(target: any, baseHandlers) {
+  if (!isObject(target)) {
+    console.warn(`target ${target} must be Obejct`)
+    return target
+  }
+  return new Proxy(target, baseHandlers)
 }
 
 export function isObject(obj) {
@@ -11,3 +15,5 @@ export function isObject(obj) {
 export const hasChanged = (val, newValue) => {
   return !Object.is(val, newValue)
 }
+
+export const hasOwn = (val, key) => Object.prototype.hasOwnProperty.call(val, key)
