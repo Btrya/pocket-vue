@@ -1,4 +1,4 @@
-import { h, renderSlots} from "../../lib/guide-pocket-vue.esm.js"
+import { h, renderSlots } from "../../lib/guide-pocket-vue.esm.js"
 
 export const Foo = {
   setup(props, { emit }) {
@@ -6,7 +6,6 @@ export const Foo = {
   },
   render() {
     const foo = h("p", {}, "foo")
-    console.log(this.$slots)
     // renderSlots 处理 数组的slots
 
     // 具名插槽
