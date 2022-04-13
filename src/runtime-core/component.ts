@@ -4,6 +4,8 @@ import { shallowReadonly } from "../reactivity/reactive"
 import { emit } from "./componentEmit"
 import { initSlots } from "./componentSlots"
 
+let currentInstance = null
+
 export function createComponentInstance(vnode) {
   const component = {
     vnode,
@@ -29,12 +31,14 @@ function setupStatefulComponent(instance) {
   instance.proxy = new Proxy({_: instance}, PublicInstanceProxyHandlers)
   const { setup } = Component
   if (setup) {
+    setCurrentInstance(instance)
     // 可能是 function / object  如果是函数就是组件的render函数 如果是object 需要注入到当前对戏那个的上下文中
     const setupResult = setup(shallowReadonly(instance.props), {
       emit: instance.emit,
     })
     // 执行 setup 把用户定义的数据 设置给 实例的 setupState
     handleSetupResult(instance, setupResult)
+    setCurrentInstance(null)
   }
 }
 
@@ -52,4 +56,12 @@ function finishComponentSetup(instance) {
   if (Component.render) {
     instance.render = Component.render
   }
+}
+
+export function getCurrentInstance() {
+  return currentInstance
+}
+
+export function setCurrentInstance(instance) {
+  currentInstance = instance
 }
