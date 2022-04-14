@@ -81,7 +81,7 @@ export function createRenderer(options) {
     if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
       if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
         // 1.老的 children 清空 
-        umountChildren(n1.children)
+        unmountChildren(n1.children)
       }
       // 2.设置 text
       if (c1 !== c2) {
@@ -97,7 +97,7 @@ export function createRenderer(options) {
     }
   }
 
-  function umountChildren(children) {
+  function unmountChildren(children) {
     for (let i = 0; i < children.length; ++i) {
       const el = children[i].el
       // remove
