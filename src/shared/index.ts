@@ -1,5 +1,7 @@
 export const extend = Object.assign
 
+export const EMPTY_OBJ = {}
+
 export function createActiveObject(target: any, baseHandlers) {
   if (!isObject(target)) {
     console.warn(`target ${target} must be Obejct`)
