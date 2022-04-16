@@ -142,25 +142,39 @@ import { h, ref } from "../../lib/guide-pocket-vue.esm.js"
 // ]
 
 // 综合例子
+// const prevChildren = [
+//   h("p", { key: "A" }, "A"), 
+//   h("p", { key: "B" }, "B"), 
+//   h("p", { key: "C", id: "c-prev" }, "C"), 
+//   h("p", { key: "D" }, "D"),
+//   h("p", { key: "E" }, "E"),
+//   h("p", { key: "Z" }, "Z"),
+//   h("p", { key: "F" }, "F"), 
+//   h("p", { key: "G" }, "G"),
+// ]
+// const nextChildren = [
+//   h("p", { key: "A" }, "A"), 
+//   h("p", { key: "B" }, "B"), 
+//   h("p", { key: "D" }, "D"),
+//   h("p", { key: "C", id: "c-next" }, "C"), 
+//   h("p", { key: "Y" }, "Y"),
+//   h("p", { key: "E" }, "E"),
+//   h("p", { key: "F" }, "F"), 
+//   h("p", { key: "G" }, "G"),
+// ]
+
+// fix
 const prevChildren = [
   h("p", { key: "A" }, "A"), 
+  h("p", {}, "C"), 
   h("p", { key: "B" }, "B"), 
-  h("p", { key: "C", id: "c-prev" }, "C"), 
   h("p", { key: "D" }, "D"),
-  h("p", { key: "E" }, "E"),
-  h("p", { key: "Z" }, "Z"),
-  h("p", { key: "F" }, "F"), 
-  h("p", { key: "G" }, "G"),
 ]
 const nextChildren = [
   h("p", { key: "A" }, "A"), 
   h("p", { key: "B" }, "B"), 
+  h("p", {}, "C"), 
   h("p", { key: "D" }, "D"),
-  h("p", { key: "C", id: "c-next" }, "C"), 
-  h("p", { key: "Y" }, "Y"),
-  h("p", { key: "E" }, "E"),
-  h("p", { key: "F" }, "F"), 
-  h("p", { key: "G" }, "G"),
 ]
 
 export default {
