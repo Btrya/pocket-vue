@@ -21,8 +21,19 @@ function parseChildren(context) {
       node = parseElement(context)
     }
   }
+  if (!node) {
+    node = parseText(context)
+  }
   nodes.push(node)
   return nodes
+}
+
+function parseText(context) {
+  const content = parseTextData(context, context.source.length)
+  return {
+    type: NodeTypes.TEXT,
+    tag: content
+  }
 }
 
 function parseElement(context) {
@@ -51,7 +62,7 @@ function parseInterpolation(context) {
   const closeIndex = context.source.indexOf(closeDelimiter, openDelimiter.length)
   advanceBy(context, openDelimiter.length) // 丢掉前两个
   const rawContentLength = closeIndex - openDelimiter.length // 拿到中间内容的长度
-  const rawContent = context.source.slice(0, rawContentLength) // 存在 content 字段中
+  const rawContent = parseTextData(context, rawContentLength) // 存在 content 字段中rawContentLength
   const content = rawContent.trim()
   advanceBy(context, rawContentLength + closeDelimiter.length) // 干掉后边的两个
 
@@ -62,6 +73,12 @@ function parseInterpolation(context) {
       content: "message"
     }
   }
+}
+
+function parseTextData(context, len) {
+  const content = context.source.slice(0, len)
+  advanceBy(context, len)
+  return content
 }
 
 function advanceBy(context, length) {
