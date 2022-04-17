@@ -32,4 +32,8 @@ describe('codegen', () => {
     const { code } = generate(ast)
     expect(code).toMatchSnapshot()
   });
+
+  it('test template', () => {
+
+  });
 });

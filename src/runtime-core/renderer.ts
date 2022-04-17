@@ -310,7 +310,7 @@ export function createRenderer(options) {
         const { proxy } = instance
         // 拿到 instance proxy， get 已经被处理过了 会返回 setupState 的
         // subTree 是 vnode树
-        const subTree = (instance.subTree = instance.render.call(proxy))
+        const subTree = (instance.subTree = instance.render.call(proxy, proxy))
         // 继续拿着 subTree 去做 patch -> vnode -> component/element -> mountComponent/mountElement -> patch...
         patch(null, subTree, container, instance, anchor)
         // element 根节点 的 el
@@ -325,7 +325,7 @@ export function createRenderer(options) {
           next.el = vnode.el
           updateComponentPreRender(instance, next)
         }
-        const subTree = instance.render.call(proxy)
+        const subTree = instance.render.call(proxy, proxy)
         const prevSubTree = instance.subTree
         instance.subTree = subTree
         patch(prevSubTree, subTree, container, instance, anchor)

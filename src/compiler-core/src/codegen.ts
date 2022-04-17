@@ -36,7 +36,7 @@ function cerateCodegenContext() {
       context.code += source
     },
     helper(key) {
-      return `_${helperMapName[key]}(`
+      return `_${helperMapName[key]}`
     }
   }
   return context
@@ -75,12 +75,12 @@ function genElement(node: any, context: any) {
 
 function genText(node: any, context: any) {
   const { push } = context
-  push(`"${node.content}"`)
+  push(`'${node.content}'`)
 }
 
 function genInterpolation(node: any, context: any) {
   const { push, helper } = context
-  push(`${helper(TO_DISPLAY_STRING)}`)
+  push(`${helper(TO_DISPLAY_STRING)}(`)
   genNode(node.content, context)
   push(`)`)
 }
