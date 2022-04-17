@@ -59,7 +59,7 @@ function parseText(context) {
   const content = parseTextData(context, endIndex)
   return {
     type: NodeTypes.TEXT,
-    tag: content
+    content
   }
 }
 

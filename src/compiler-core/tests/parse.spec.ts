@@ -32,7 +32,7 @@ describe('Parse', () => {
       const ast = baseParse("some text")
       expect(ast.children[0]).toStrictEqual({
         type: NodeTypes.TEXT,
-        tag: "some text"
+        content: "some text"
       })
     });
   });
@@ -45,7 +45,7 @@ describe('Parse', () => {
       children: [
         {
           type: NodeTypes.TEXT,
-          tag: "hi, "
+          content: "hi, "
         },
         {
           type: NodeTypes.INTERPOLATION,
@@ -70,7 +70,7 @@ describe('Parse', () => {
           children: [
             {
               type: NodeTypes.TEXT,
-              tag: "hi, "
+              content: "hi, "
             },
           ]
         },
