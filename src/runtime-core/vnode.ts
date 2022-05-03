@@ -25,7 +25,7 @@ export function createVnode(type, props?, children?) {
   }
 
   // 组件 + children object
-  if (vnode.shapeFlag & ShapeFlags.STATEFUL_COMPOENNT) {
+  if (vnode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
     if (typeof children === "object") {
       vnode.shapeFlag |= ShapeFlags.SLOT_CHILDREN
     }
@@ -35,7 +35,7 @@ export function createVnode(type, props?, children?) {
 }
 
 function getShapeFlag(type) {
-  return typeof type === "string" ? ShapeFlags.ELEMENT : ShapeFlags.STATEFUL_COMPOENNT
+  return typeof type === "string" ? ShapeFlags.ELEMENT : ShapeFlags.STATEFUL_COMPONENT
 }
 
 export function createTextVNode(text) {

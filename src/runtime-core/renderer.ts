@@ -38,7 +38,7 @@ export function createRenderer(options) {
         if (shapeFlag & ShapeFlags.ELEMENT) {
           processElement(n1, n2, container, parentComponent, anchor)
           // STATEFUL_COMPONENT
-        } else if (shapeFlag & ShapeFlags.STATEFUL_COMPOENNT) {
+        } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
           processComponent(n1, n2, container, parentComponent, anchor)
         }
         break
